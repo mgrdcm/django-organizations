@@ -85,3 +85,15 @@ except (ImportError, ValueError, AttributeError):
 
 class SlugField(BaseSlugField):
     """Class redefinition for migrations"""
+
+    def __init__(self, *args, **kwargs):
+        extra_kwargs = {}
+
+        # The django-extensions AutoSlugField will overwrite an explicit slug with the auto populate from version
+        # unless changed by setting overwrite_on_add to False
+        for base in self.__class__.__bases__:
+            if base.__module__ == "django_extensions.db.fields" and base.__name__ == "AutoSlugField":
+                extra_kwargs["overwrite_on_add"] = False
+                break
+
+        super().__init__(*args, **kwargs, **extra_kwargs)
