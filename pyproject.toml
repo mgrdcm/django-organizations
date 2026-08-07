@@ -55,7 +55,7 @@ tests = [
 ]
 dev = [
     {include-group = "tests"},
-    "ruff",
+    "ruff<0.16",
     "tox",
     "pre-commit",
 ]
